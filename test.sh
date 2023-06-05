@@ -16,8 +16,8 @@ assert() {
     fi
 }
 
-assert 0 0
-assert 42 42
-assert 123 123
+assert 0 "0"
+assert 21 "5+20-4"
+assert 123 "100+20+3"
 
 echo OK
