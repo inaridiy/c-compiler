@@ -24,6 +24,22 @@ struct Token
 
 Token *token;
 
+char *user_input;
+
+void error_at(char *loc, char *msg, ...)
+{
+    va_list ap;
+    va_start(ap, msg);
+
+    int pos = loc - user_input;
+    fprintf(stderr, "%s\n", user_input);
+    fprintf(stderr, "%*s", pos, " "); // pos個の空白を出力
+    fprintf(stderr, "^ ");
+    vfprintf(stderr, msg, ap);
+    fprintf(stderr, "\n");
+    exit(1);
+}
+
 void error(char *fmt, ...)
 {
     va_list ap;
@@ -51,7 +67,7 @@ void expect(char op)
 int expect_number()
 {
     if (token->kind != TK_NUM)
-        error("数じゃねぇ！！！！");
+        error_at(token->str, "数じゃねぇ！！！！");
     int val = token->val;
     token = token->next;
     return val;
@@ -133,6 +149,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    user_input = argv[1];
     token = tokenize(argv[1]);
 
     printf(".intel_syntax noprefix\n");

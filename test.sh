@@ -23,5 +23,6 @@ assert 41 " 12 + 34 - 5 "
 assert 65 "'A'"
 assert 66 "'A' + 1"
 assert 131 "'A' + 'B'"
+assert 0 "1++"
 
 echo OK
