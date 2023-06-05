@@ -23,6 +23,10 @@ assert 41 " 12 + 34 - 5 "
 assert 65 "'A'"
 assert 66 "'A' + 1"
 assert 131 "'A' + 'B'"
-assert 0 "1++"
+assert 12 "2 * 6"
+assert 47 '5+6*7'
+assert 15 '5*(9-6)'
+assert 4 '(3+5)/2'
+assert 90 "'A' * 'B' - 4200"
 
 echo OK
