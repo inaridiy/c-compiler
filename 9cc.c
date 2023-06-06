@@ -114,25 +114,25 @@ Token *tokenize(char *p)
             continue;
         }
 
-        // if (*p == '\'')
-        // {
-        //     p++;
-        //     if (isalpha(*p))
-        //     {
-        //         cur = new_token(TK_NUM, cur, p);
-        //         cur->val = *p;
-        //         p++;
-        //         if (*p == '\'')
-        //         {
-        //             p++;
-        //             continue;
-        //         }
-        //         else
-        //         {
-        //             error("文字リテラルが閉じてねぇ？");
-        //         }
-        //     }
-        // }
+        if (*p == '\'')
+        {
+            p++;
+            if (isalpha(*p))
+            {
+                cur = new_token(TK_NUM, cur, p, 1);
+                cur->val = *p;
+                p++;
+                if (*p == '\'')
+                {
+                    p++;
+                    continue;
+                }
+                else
+                {
+                    error("文字リテラルが閉じてねぇ？");
+                }
+            }
+        }
 
         error("トークナイズできねぇ！！！");
     }
