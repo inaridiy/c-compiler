@@ -33,6 +33,17 @@ bool strstart(char *p, char *q);
 bool at_eof();
 Token *tokenize(char *p);
 
+typedef struct LVar LVar;
+
+struct LVar
+{
+    LVar *next;
+    char *name;
+    int len;
+    int offset;
+};
+LVar *find_lvar(Token *tok);
+
 void error(char *fmt, ...);
 
 typedef enum
@@ -83,3 +94,4 @@ extern Token *token;
 extern char *user_input;
 extern Node *node;
 extern Node *code[100];
+// extern LVar *locals;

@@ -40,6 +40,6 @@ assert 1 "100>=100;"
 assert 1 "100<=100;"
 assert 1 "65=='A';"
 assert 65 "a='A';a;"
-assert 120 "a=3;b=80;a*b/2;"
+assert 120 "a_aa=3; bbbb=80; a_aa * bbbb/2; "
 
 echo OK
