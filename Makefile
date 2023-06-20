@@ -1,16 +1,16 @@
-CFLAGS=-std=c11 -g -static
-SRCS=$(wildcard *.c)
+CFLAGS=-std=c11 -g -static -I./include
+SRCS=$(wildcard src/*.c)
 OBJS=$(SRCS:.c=.o)
 
 9cc: $(OBJS)
 	$(CC) -o 9cc $(OBJS) $(LDFLAGS)
 
-$(OBJS): 9cc.h
+$(OBJS): include/9cc.h
 
 test: 9cc
 	./test.sh
 
 clean:
-	rm -f 9cc *.o *~ tmp*
+	rm -f 9cc src/*.o *~ tmp*
 
 .PHONY: test clean
