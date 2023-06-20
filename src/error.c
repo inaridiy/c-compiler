@@ -8,6 +8,7 @@ void error(char *fmt, ...)
     fprintf(stderr, "\n");
     exit(1);
 }
+
 void error_at(char *loc, char *fmt, ...)
 {
     va_list ap;
