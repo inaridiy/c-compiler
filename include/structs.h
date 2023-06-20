@@ -20,4 +20,4 @@ struct Token
     int len;
 };
 
-#endif // STRUCTS_H
+#endif

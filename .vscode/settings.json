@@ -19,7 +19,13 @@
         "9cc.h": "c",
         "ctype.h": "c",
         "structs.h": "c",
-        "tokenizer.h": "c"
+        "tokenizer.h": "c",
+        "stddef.h": "c",
+        "string.h": "c",
+        "stdbool.h": "c",
+        "stdarg.h": "c",
+        "tokenize_utils.h": "c",
+        "error.h": "c"
     },
     "files.exclude": {
         "**/*.o": true
