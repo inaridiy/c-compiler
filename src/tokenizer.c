@@ -66,7 +66,7 @@ Token *tokenize(char *p)
             continue;
         }
 
-        error_at(cur->str, "パースできません"); // TODO: これでいいのかわからん
+        error_at(p, "パースできません"); // TODO: これでいいのかわからん
     }
 
     new_token(TK_EOF, cur, p, 0);
