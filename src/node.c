@@ -158,6 +158,25 @@ Node *stmt()
         node->kind = ND_RETURN;
         node->lhs = expr();
     }
+    else if (consume_token(TK_IF))
+    {
+        node = calloc(1, sizeof(Node));
+        node->kind = ND_IF;
+        expect("(", "ifの後には開きカッコがねぇ！！");
+        node->lhs = expr();
+        expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
+        node->rhs = stmt();
+        return node;
+    }
+    else if (consume_token(TK_WHILE))
+    {
+        node = calloc(1, sizeof(Node));
+        node->kind = ND_WHILE;
+        expect("(", "whileの後には開きカッコがねぇ！！");
+        node->lhs = expr();
+        expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
+        node->rhs = stmt();
+    }
     else
     {
         node = expr();

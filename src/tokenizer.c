@@ -122,6 +122,34 @@ Token *tokenize(char *p)
             continue;
         }
 
+        if (strstart("if", p) && !is_ident2(p[2]))
+        {
+            cur = new_token(TK_IF, cur, p, 2);
+            p += 2;
+            continue;
+        }
+
+        if (strstart("else", p) && !is_ident2(p[4]))
+        {
+            cur = new_token(TK_ELSE, cur, p, 4);
+            p += 4;
+            continue;
+        }
+
+        if (strstart("while", p) && !is_ident2(p[5]))
+        {
+            cur = new_token(TK_WHILE, cur, p, 5);
+            p += 5;
+            continue;
+        }
+
+        if (strstart("for", p) && !is_ident2(p[3]))
+        {
+            cur = new_token(TK_FOR, cur, p, 3);
+            p += 3;
+            continue;
+        }
+
         if (isdigit(*p))
         {
             cur = new_token(TK_NUM, cur, p, 0);

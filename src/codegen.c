@@ -30,6 +30,14 @@ void node_gen(Node *node)
         printf("    pop rbp\n");
         printf("    ret\n");
         return;
+    case ND_IF:
+        node_gen(node->lhs);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .LendXXX\n");
+        node_gen(node->rhs);
+        printf(".LendXXX:\n");
+        return;
     case ND_NUM:
         printf("    push %d\n", node->val);
         return;
