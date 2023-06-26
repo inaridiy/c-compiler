@@ -1,18 +1,26 @@
-#include "9cc.h"
+#include <ctype.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "codegen.h"
+#include "error.h"
+#include "global.h"
 
 void gen_lval(Node *node)
 {
     if (node->kind != ND_LVAR)
-        error("変数以外には代入できねぇ！！！");
+        error_at(token->str, "代入の左辺値が変数ではありません");
 
     printf("  mov rax, rbp\n");
     printf("  sub rax, %d\n", node->offset);
     printf("  push rax\n");
 }
 
-void gen(Node *node)
+void node_gen(Node *node)
 {
-
     switch (node->kind)
     {
     case ND_NUM:
@@ -26,7 +34,7 @@ void gen(Node *node)
         return;
     case ND_ASSIGN:
         gen_lval(node->lhs);
-        gen(node->rhs);
+        node_gen(node->rhs);
 
         printf("    pop rdi\n");
         printf("    pop rax\n");
@@ -35,8 +43,8 @@ void gen(Node *node)
         return;
     }
 
-    gen(node->lhs);
-    gen(node->rhs);
+    node_gen(node->lhs);
+    node_gen(node->rhs);
 
     printf("    pop rdi\n");
     printf("    pop rax\n");
@@ -79,4 +87,26 @@ void gen(Node *node)
     }
 
     printf("    push rax\n");
+}
+
+void codegen()
+{
+    printf(".intel_syntax noprefix\n");
+    printf(".globl main\n");
+    printf("main:\n");
+
+    // 変数の領域を確保
+    printf("  push rbp\n");
+    printf("  mov rbp, rsp\n");
+    printf("  sub rsp, 208\n");
+
+    for (int i = 0; code[i]; i++)
+    {
+        node_gen(code[i]);
+        printf("    pop rax\n");
+    }
+
+    printf("  mov rsp, rbp\n");
+    printf("  pop rbp\n");
+    printf("  ret\n");
 }
