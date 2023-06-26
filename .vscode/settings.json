@@ -29,7 +29,8 @@
         "node.h": "c",
         "lvar.h": "c",
         "global.h": "c",
-        "codegen.h": "c"
+        "codegen.h": "c",
+        "stdlib.h": "c"
     },
     "files.exclude": {
         "**/*.o": true

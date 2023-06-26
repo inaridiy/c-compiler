@@ -11,6 +11,7 @@
 #include "global.h"
 #include "structs.h"
 #include "tokenizer.h"
+#include "node.h"
 #include "codegen.h"
 
 #endif
