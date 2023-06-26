@@ -157,6 +157,8 @@ Node *stmt()
         node = calloc(1, sizeof(Node));
         node->kind = ND_RETURN;
         node->lhs = expr();
+        expect(";", "セミコロンがねぇ！！");
+        return node;
     }
     else if (consume_token(TK_IF))
     {
@@ -166,24 +168,15 @@ Node *stmt()
         node->lhs = expr();
         expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
         node->rhs = stmt();
-        return node;
-    }
-    else if (consume_token(TK_WHILE))
-    {
-        node = calloc(1, sizeof(Node));
-        node->kind = ND_WHILE;
-        expect("(", "whileの後には開きカッコがねぇ！！");
-        node->lhs = expr();
-        expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
-        node->rhs = stmt();
+
+                return node;
     }
     else
     {
         node = expr();
+        expect(";", "セミコロンがねぇ！！");
+        return node;
     }
-
-    expect(";", "セミコロンがねぇ！！");
-    return node;
 }
 
 void program()
