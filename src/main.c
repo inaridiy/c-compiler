@@ -2,6 +2,7 @@
 
 Token *token;
 char *user_input;
+Node *code[100];
 
 int main(int argc, char **argv)
 {
@@ -13,6 +14,10 @@ int main(int argc, char **argv)
 
     user_input = argv[1];
     token = tokenize(user_input);
+
+    program();
+
+    codegen();
 
     return 0;
 }

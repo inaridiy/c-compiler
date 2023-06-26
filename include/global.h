@@ -5,6 +5,7 @@
 
 extern Token *token;
 extern char *user_input;
+extern Node *code[100];
 
 void error(char *fmt, ...);
 

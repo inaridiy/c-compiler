@@ -1,4 +1,12 @@
+#include <ctype.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "error.h"
+#include "global.h"
 
 void error(char *fmt, ...)
 {

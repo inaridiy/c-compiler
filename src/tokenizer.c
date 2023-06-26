@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "tokenizer.h"
 #include "error.h"
 #include "tokenize_utils.h"
-#include "tokenizer.h"
+#include "global.h"
 
 Token *new_token(TokenKind kind, Token *cur, char *str, int len)
 {
@@ -17,6 +18,49 @@ Token *new_token(TokenKind kind, Token *cur, char *str, int len)
     tok->len = len;
     cur->next = tok;
     return tok;
+}
+
+Token *consume_indent()
+{
+    if (token->kind != TK_INDENT)
+        return false;
+    Token *old = token;
+    token = token->next;
+    return old;
+}
+
+bool consume(char *op)
+{
+    if (token->kind != TK_RESERVED ||
+        strlen(op) != token->len ||
+        memcmp(token->str, op, token->len))
+        return false;
+    token = token->next;
+    return true;
+}
+
+bool expect(char *op, char *str)
+{
+    if (token->kind != TK_RESERVED ||
+        strlen(op) != token->len ||
+        memcmp(token->str, op, token->len))
+        error_at(token->str, str, op);
+    token = token->next;
+    return true;
+}
+
+int expect_number()
+{
+    if (token->kind != TK_NUM)
+        error_at(token->str, "数値ではありません");
+    int val = token->val;
+    token = token->next;
+    return val;
+}
+
+bool at_eof()
+{
+    return token->kind == TK_EOF;
 }
 
 Token *tokenize(char *p)
@@ -44,6 +88,23 @@ Token *tokenize(char *p)
         {
             cur = new_token(TK_RESERVED, cur, p++, 1);
             continue;
+        }
+
+        if (strchr("\'", *p))
+        {
+            p++;
+            if (!isalpha(*p))
+                continue;
+            cur = new_token(TK_NUM, cur, p, 1);
+            cur->val = *p;
+            p++;
+            if (strchr("\'", *p))
+            {
+                p++;
+                continue;
+            }
+            else
+                error("文字リテラルが閉じてねぇ？");
         }
 
         if (isdigit(*p))

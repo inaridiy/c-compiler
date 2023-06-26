@@ -25,7 +25,11 @@
         "stdbool.h": "c",
         "stdarg.h": "c",
         "tokenize_utils.h": "c",
-        "error.h": "c"
+        "error.h": "c",
+        "node.h": "c",
+        "lvar.h": "c",
+        "global.h": "c",
+        "codegen.h": "c"
     },
     "files.exclude": {
         "**/*.o": true
