@@ -180,6 +180,16 @@ Node *stmt()
 
         return node;
     }
+    else if (consume_token(TK_WHILE))
+    {
+        node = calloc(1, sizeof(Node));
+        node->kind = ND_WHILE;
+        expect("(", "whileの後には開きカッコがねぇ！！");
+        node->lhs = expr();
+        expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
+        node->rhs = stmt();
+        return node;
+    }
     else
     {
         node = expr();
