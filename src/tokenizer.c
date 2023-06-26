@@ -39,6 +39,14 @@ bool consume(char *op)
     return true;
 }
 
+bool consume_token(TokenKind kind)
+{
+    if (token->kind != kind)
+        return false;
+    token = token->next;
+    return true;
+}
+
 bool expect(char *op, char *str)
 {
     if (token->kind != TK_RESERVED ||
@@ -105,6 +113,13 @@ Token *tokenize(char *p)
             }
             else
                 error("文字リテラルが閉じてねぇ？");
+        }
+
+        if (strstart("return", p) && !is_ident2(p[6]))
+        {
+            cur = new_token(TK_RETURN, cur, p, 6);
+            p += 6;
+            continue;
         }
 
         if (isdigit(*p))
