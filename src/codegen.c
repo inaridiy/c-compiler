@@ -9,6 +9,8 @@
 #include "error.h"
 #include "global.h"
 
+int label_num = 0;
+
 void lval_gen(Node *node);
 void if_else_gen(Node *node);
 void node_gen(Node *node);
@@ -25,18 +27,18 @@ void lval_gen(Node *node)
 
 void if_else_gen(Node *node)
 {
-
+    label_num++;
     if (node->rhs->kind == ND_ELSE)
     {
         node_gen(node->lhs);
         printf("    pop rax\n");
         printf("    cmp rax, 0\n");
-        printf("    je .LelseXXX\n");
+        printf("    je .Lelse%d\n", label_num);
         node_gen(node->rhs->lhs);
-        printf("    jmp .LendXXX\n");
-        printf(".LelseXXX:\n");
+        printf("    jmp .Lend%d\n", label_num);
+        printf(".Lelse%d:\n", label_num);
         node_gen(node->rhs->rhs);
-        printf(".LendXXX:\n");
+        printf(".Lend%d:\n", label_num);
         return;
     }
     else
@@ -44,9 +46,9 @@ void if_else_gen(Node *node)
         node_gen(node->lhs);
         printf("    pop rax\n");
         printf("    cmp rax, 0\n");
-        printf("    je .LendXXX\n");
+        printf("    je .Lend%d\n", label_num);
         node_gen(node->rhs);
-        printf(".LendXXX:\n");
+        printf(".Lend%d:\n", label_num);
         return;
     }
 }

@@ -47,5 +47,6 @@ assert 120 "a=7;b=6;if(a>b) return 120; return 0;"
 assert 0 "a=5;b=6;if(a>b) return 120; return 0;"
 assert 120 "a=7;b=6;if(a>b) return 120; else return 0;"
 assert 0 "a=5;b=6;if(a>b) return 120;else return 0;"
+assert 50 "a=5;b=6;if(a>b) return 120;if(a<b) return 50;"
 
 echo OK
