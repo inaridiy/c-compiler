@@ -43,5 +43,9 @@ assert 65 "a='A';a;"
 assert 120 "a_aa=3; bbbb=80; return a_aa * bbbb/2; "
 assert 120 "a=7;b=6;if(a>b) return 120; return 0;"
 assert 0 "a=5;b=6;if(a>b) return 120; return 0;"
+assert 120 "a=7;b=6;if(a>b) return 120; return 0;"
+assert 0 "a=5;b=6;if(a>b) return 120; return 0;"
+assert 120 "a=7;b=6;if(a>b) return 120; else return 0;"
+assert 0 "a=5;b=6;if(a>b) return 120;else return 0;"
 
 echo OK

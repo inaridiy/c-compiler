@@ -9,7 +9,11 @@
 #include "error.h"
 #include "global.h"
 
-void gen_lval(Node *node)
+void lval_gen(Node *node);
+void if_else_gen(Node *node);
+void node_gen(Node *node);
+
+void lval_gen(Node *node)
 {
     if (node->kind != ND_LVAR)
         error_at(token->str, "代入の左辺値が変数ではありません");
@@ -17,6 +21,34 @@ void gen_lval(Node *node)
     printf("  mov rax, rbp\n");
     printf("  sub rax, %d\n", node->offset);
     printf("  push rax\n");
+}
+
+void if_else_gen(Node *node)
+{
+
+    if (node->rhs->kind == ND_ELSE)
+    {
+        node_gen(node->lhs);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .LelseXXX\n");
+        node_gen(node->rhs->lhs);
+        printf("    jmp .LendXXX\n");
+        printf(".LelseXXX:\n");
+        node_gen(node->rhs->rhs);
+        printf(".LendXXX:\n");
+        return;
+    }
+    else
+    {
+        node_gen(node->lhs);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .LendXXX\n");
+        node_gen(node->rhs);
+        printf(".LendXXX:\n");
+        return;
+    }
 }
 
 void node_gen(Node *node)
@@ -31,24 +63,19 @@ void node_gen(Node *node)
         printf("    ret\n");
         return;
     case ND_IF:
-        node_gen(node->lhs);
-        printf("    pop rax\n");
-        printf("    cmp rax, 0\n");
-        printf("    je .LendXXX\n");
-        node_gen(node->rhs);
-        printf(".LendXXX:\n");
+        if_else_gen(node);
         return;
     case ND_NUM:
         printf("    push %d\n", node->val);
         return;
     case ND_LVAR:
-        gen_lval(node);
+        lval_gen(node);
         printf("    pop rax\n");
         printf("    mov rax, [rax]\n");
         printf("    push rax\n");
         return;
     case ND_ASSIGN:
-        gen_lval(node->lhs);
+        lval_gen(node->lhs);
         node_gen(node->rhs);
 
         printf("    pop rdi\n");

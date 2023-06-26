@@ -169,7 +169,16 @@ Node *stmt()
         expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
         node->rhs = stmt();
 
-                return node;
+        if (consume_token(TK_ELSE))
+        {
+            Node *else_node = calloc(1, sizeof(Node));
+            else_node->kind = ND_ELSE;
+            else_node->lhs = node->rhs;
+            else_node->rhs = stmt();
+            node->rhs = else_node;
+        }
+
+        return node;
     }
     else
     {
