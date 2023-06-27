@@ -67,6 +67,21 @@ void while_gen(Node *node)
     printf(".Lend%d:\n", label_num);
 }
 
+void for_gen(Node *node)
+{
+    label_num++;
+    node_gen(node->lhs->lhs);
+    printf(".Lbegin%d:\n", label_num);
+    node_gen(node->lhs->rhs);
+    printf("    pop rax\n");
+    printf("    cmp rax, 0\n");
+    printf("    je .Lend%d\n", label_num);
+    node_gen(node->rhs->rhs);
+    node_gen(node->rhs->lhs);
+    printf("    jmp .Lbegin%d\n", label_num);
+    printf(".Lend%d:\n", label_num);
+}
+
 void node_gen(Node *node)
 {
     switch (node->kind)
@@ -83,6 +98,9 @@ void node_gen(Node *node)
         return;
     case ND_WHILE:
         while_gen(node);
+        return;
+    case ND_FOR:
+        for_gen(node);
         return;
     case ND_NUM:
         printf("    push %d\n", node->val);

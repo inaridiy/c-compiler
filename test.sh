@@ -49,5 +49,7 @@ assert 120 "a=7;b=6;if(a>b) return 120; else return 0;"
 assert 0 "a=5;b=6;if(a>b) return 120;else return 0;"
 assert 50 "a=5;b=6;if(a>b) return 120;if(a<b) return 50;"
 assert 128 "a=b=2;while(100>a)a=a*b;return a;"
+assert 32 "a=2;for(i=0;4>i;i=i+1)a=a*2;return a;"
+assert 10 "a=0;for(i=0;i<10;i=i+1)a=a+1;return a;"
 
 echo OK
