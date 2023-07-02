@@ -43,7 +43,7 @@ typedef enum
     ND_ELSE,
     ND_WHILE,
     ND_FOR,
-
+    ND_BLOCK
 } NodeKind;
 
 typedef struct Node Node;
@@ -51,10 +51,12 @@ typedef struct Node Node;
 struct Node
 {
     NodeKind kind;
-    Node *lhs;  // 左辺
-    Node *rhs;  // 右辺
-    int val;    // kindがND_NUMの時
-    int offset; // kindがND_LVARの時
+    Node *lhs;     // 左辺
+    Node *rhs;     // 右辺
+    int val;       // kindがND_NUMの時
+    int offset;    // kindがND_LVARの時
+    Node **stmts;  // kindがND_BLOCKの時
+    int stmts_len; // kindがND_BLOCKの時
 };
 
 typedef struct LVar LVar;

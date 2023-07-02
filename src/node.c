@@ -218,6 +218,33 @@ Node *stmt()
         node_right->rhs = stmt();
         return node;
     }
+    else if (consume("{"))
+    {
+
+        Node *node = calloc(1, sizeof(Node));
+        node->kind = ND_BLOCK;
+        int capacity = 16;
+        node->stmts = calloc(capacity, sizeof(Node *));
+
+        int i = 0;
+        while (!consume("}"))
+        {
+            if (i >= 16)
+            {
+                capacity += 16;
+                node->stmts = realloc(node->stmts, capacity * sizeof(Node *));
+                if (!node->stmts)
+                {
+                    fprintf(stderr, "メモリ確保に失敗したらしいです\n");
+                    exit(1);
+                }
+            }
+
+            node->stmts[i++] = stmt();
+        }
+        node->stmts_len = i;
+        return node;
+    }
     else
     {
         node = expr();

@@ -51,5 +51,7 @@ assert 50 "a=5;b=6;if(a>b) return 120;if(a<b) return 50;"
 assert 128 "a=b=2;while(100>a)a=a*b;return a;"
 assert 32 "a=2;for(i=0;4>i;i=i+1)a=a*2;return a;"
 assert 10 "a=0;for(i=0;i<10;i=i+1)a=a+1;return a;"
+assert 55 "a=0;b=1;for(i=0;i<10;i=i+1){c=a+b;a=b;b=c;}return a;"
+assert 144 "a=0;b=1;for(i=0;i<12;i=i+1){c=a+b;a=b;b=c;}return a;"
 
 echo OK

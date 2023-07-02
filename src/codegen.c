@@ -82,6 +82,15 @@ void for_gen(Node *node)
     printf(".Lend%d:\n", label_num);
 }
 
+void block_gen(Node *node)
+{
+    for (int i = 0; i < node->stmts_len; i++)
+    {
+        node_gen(node->stmts[i]);
+        printf("    pop rax\n");
+    }
+}
+
 void node_gen(Node *node)
 {
     switch (node->kind)
@@ -101,6 +110,9 @@ void node_gen(Node *node)
         return;
     case ND_FOR:
         for_gen(node);
+        return;
+    case ND_BLOCK:
+        block_gen(node);
         return;
     case ND_NUM:
         printf("    push %d\n", node->val);
