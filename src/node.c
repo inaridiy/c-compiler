@@ -190,6 +190,34 @@ Node *stmt()
         node->rhs = stmt();
         return node;
     }
+    else if (consume_token(TK_FOR))
+    {
+        node = calloc(1, sizeof(Node));
+        node->kind = ND_FOR;
+        Node *node_left = calloc(1, sizeof(Node));
+        Node *node_right = calloc(1, sizeof(Node));
+        node->lhs = node_left;
+        node->rhs = node_right;
+
+        expect("(", "forの後には開きカッコがねぇ！！");
+        if (!consume(";"))
+        {
+            node_left->lhs = expr();
+            expect(";", "セミコロンがねぇ！！");
+        }
+        if (!consume(";"))
+        {
+            node_left->rhs = expr();
+            expect(";", "セミコロンがねぇ！！");
+        }
+        if (!consume(")"))
+        {
+            node_right->lhs = expr();
+            expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
+        }
+        node_right->rhs = stmt();
+        return node;
+    }
     else
     {
         node = expr();
