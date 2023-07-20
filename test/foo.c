@@ -1,3 +1,7 @@
 #include <stdio.h>
 
-int foo() { printf("OK\n"); }
+int foo()
+{
+    printf("OK\n");
+    return 123;
+}
