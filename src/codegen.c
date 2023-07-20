@@ -91,6 +91,12 @@ void block_gen(Node *node)
     }
 }
 
+void funccall_gen(Node *node)
+{
+    printf("  call %s\n", node->funcname);
+    printf("  push rax\n");
+}
+
 void node_gen(Node *node)
 {
     switch (node->kind)
@@ -113,6 +119,9 @@ void node_gen(Node *node)
         return;
     case ND_BLOCK:
         block_gen(node);
+        return;
+    case ND_FUNCALL:
+        funccall_gen(node);
         return;
     case ND_NUM:
         printf("    push %d\n", node->val);

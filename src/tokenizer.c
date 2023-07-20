@@ -20,6 +20,7 @@ Token *new_token(TokenKind kind, Token *cur, char *str, int len)
     return tok;
 }
 
+// インデントを消費する
 Token *consume_indent()
 {
     if (token->kind != TK_INDENT)

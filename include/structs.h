@@ -43,7 +43,8 @@ typedef enum
     ND_ELSE,
     ND_WHILE,
     ND_FOR,
-    ND_BLOCK
+    ND_BLOCK,
+    ND_FUNCALL,
 } NodeKind;
 
 typedef struct Node Node;
@@ -51,12 +52,19 @@ typedef struct Node Node;
 struct Node
 {
     NodeKind kind;
-    Node *lhs;     // 左辺
-    Node *rhs;     // 右辺
-    int val;       // kindがND_NUMの時
-    int offset;    // kindがND_LVARの時
+    Node *lhs; // 左辺
+    Node *rhs; // 右辺
+    int val;   // kindがND_NUMの時
+
+    int offset; // kindがND_LVARの時
+
     Node **stmts;  // kindがND_BLOCKの時
     int stmts_len; // kindがND_BLOCKの時
+
+    char *funcname;   // kindがND_FUNCALLの時
+    int funcname_len; // kindがND_FUNCALLの時
+    Node **args;      // kindがND_FUNCALLの時
+    int args_len;     // kindがND_FUNCALLの時
 };
 
 typedef struct LVar LVar;
@@ -67,6 +75,15 @@ struct LVar
     char *name;
     int len;
     int offset;
+};
+
+typedef struct Func Func;
+
+struct Func
+{
+    Func *next;
+    char *name;
+    int len;
 };
 
 #endif

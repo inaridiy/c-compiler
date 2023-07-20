@@ -8,6 +8,7 @@
 #include "node.h"
 #include "tokenizer.h"
 #include "lvar.h"
+#include "func.h"
 #include "error.h"
 #include "global.h"
 
@@ -41,15 +42,37 @@ Node *new_node_lvar(LVar *lvar)
     return node;
 }
 
-Node *primary()
+Node *new_node_func(Func *func)
 {
-    Token *tok = consume_indent();
-    if (tok)
+    Node *node = calloc(1, sizeof(Node));
+    node->kind = ND_FUNCALL;
+    node->funcname = func->name;
+    node->funcname_len = func->len;
+
+    return node;
+}
+
+Node *primary() // 値を返す ex) 1 (1 + 2) a (a + b)
+{
+    Token *indent = consume_indent();
+    if (indent)
     {
-        LVar *lvar = find_lvar(tok); // Cでこの記法行けるのか？
-        if (!lvar)
-            lvar = new_lvar(tok);
-        return new_node_lvar(lvar);
+        if (consume("("))
+        {
+            Func *func = find_func(indent);
+            if (!func)
+                error_at(indent->str, "ittan");
+            expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
+            return new_node_func(func);
+        }
+        else
+        {
+            LVar *lvar = find_lvar(indent);
+
+            if (!lvar)
+                lvar = new_lvar(indent);
+            return new_node_lvar(lvar);
+        }
     }
 
     if (consume("("))
@@ -62,7 +85,7 @@ Node *primary()
     return new_node_num(expect_number());
 }
 
-Node *unary()
+Node *unary() // 単項演算子 + - ex) +1 -1
 {
     if (consume("+"))
         return primary();
@@ -71,7 +94,7 @@ Node *unary()
     return primary();
 }
 
-Node *mul()
+Node *mul() // 乗算除算 ex) 1 * 2 1 / 2
 {
     Node *node = unary();
 
@@ -86,7 +109,7 @@ Node *mul()
     }
 }
 
-Node *add()
+Node *add() // 加算減算 ex) 1 + 2 1 - 2
 {
     Node *node = mul();
 
@@ -101,7 +124,7 @@ Node *add()
     }
 }
 
-Node *relational()
+Node *relational() // 比較演算子 ex) 1 < 2 1 > 2 1 <= 2 1 >= 2
 {
     Node *node = add();
 
@@ -120,7 +143,7 @@ Node *relational()
     }
 }
 
-Node *equality()
+Node *equality() // 等価演算子 ex) 1 == 2 1 != 2
 {
     Node *node = relational();
 
@@ -135,7 +158,7 @@ Node *equality()
     }
 }
 
-Node *assign()
+Node *assign() // 代入演算子 ex) a = 1 a += 1 a -= 1
 {
     Node *node = equality();
     if (consume("="))
@@ -143,12 +166,12 @@ Node *assign()
     return node;
 }
 
-Node *expr()
+Node *expr() // 式
 {
     return assign();
 }
 
-Node *stmt()
+Node *stmt() // 文
 {
     Node *node;
 

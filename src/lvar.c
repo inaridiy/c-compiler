@@ -9,6 +9,7 @@
 
 LVar *locals;
 
+// ローカル変数を検索する
 LVar *find_lvar(Token *tok)
 {
     for (LVar *var = locals; var; var = var->next)

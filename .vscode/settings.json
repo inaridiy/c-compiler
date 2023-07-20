@@ -30,7 +30,8 @@
         "lvar.h": "c",
         "global.h": "c",
         "codegen.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "func.h": "c"
     },
     "files.exclude": {
         "**/*.o": true
