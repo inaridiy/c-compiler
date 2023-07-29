@@ -11,6 +11,7 @@
 #include "func.h"
 #include "error.h"
 #include "global.h"
+#include "node_utils.h"
 
 Node *node;
 
@@ -62,6 +63,12 @@ Node *primary() // 値を返す ex) 1 (1 + 2) a (a + b)
             Func *func = find_func(indent);
             if (!func)
                 error_at(indent->str, "ittan");
+
+            // do
+            // {
+            //     Node *node = expr();
+            // } while (consume(","));
+
             expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
             return new_node_func(func);
         }
@@ -246,26 +253,13 @@ Node *stmt() // 文
 
         Node *node = calloc(1, sizeof(Node));
         node->kind = ND_BLOCK;
-        int capacity = 16;
-        node->stmts = calloc(capacity, sizeof(Node *));
+        node->stmts = init_dynamic_node_array(16);
 
-        int i = 0;
         while (!consume("}"))
         {
-            if (i >= 16)
-            {
-                capacity += 16;
-                node->stmts = realloc(node->stmts, capacity * sizeof(Node *));
-                if (!node->stmts)
-                {
-                    fprintf(stderr, "メモリ確保に失敗したらしいです\n");
-                    exit(1);
-                }
-            }
-
-            node->stmts[i++] = stmt();
+            push_node(node->stmts, stmt());
         }
-        node->stmts_len = i;
+
         return node;
     }
     else

@@ -84,9 +84,9 @@ void for_gen(Node *node)
 
 void block_gen(Node *node)
 {
-    for (int i = 0; i < node->stmts_len; i++)
+    for (int i = 0; i < node->stmts->len; i++)
     {
-        node_gen(node->stmts[i]);
+        node_gen(node->stmts->data[i]);
         printf("    pop rax\n");
     }
 }

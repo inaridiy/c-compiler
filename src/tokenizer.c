@@ -7,6 +7,7 @@
 
 #include "tokenizer.h"
 #include "error.h"
+#include "node_utils.h"
 #include "tokenize_utils.h"
 #include "global.h"
 

@@ -49,6 +49,8 @@ typedef enum
 
 typedef struct Node Node;
 
+typedef struct DynamicNodeArray DynamicNodeArray;
+
 struct Node
 {
     NodeKind kind;
@@ -58,13 +60,21 @@ struct Node
 
     int offset; // kindがND_LVARの時
 
-    Node **stmts;  // kindがND_BLOCKの時
-    int stmts_len; // kindがND_BLOCKの時
+    // Node **stmts;  // kindがND_BLOCKの時
+    // int stmts_len; // kindがND_BLOCKの時
+    DynamicNodeArray *stmts; // kindがND_BLOCKの時
 
     char *funcname;   // kindがND_FUNCALLの時
     int funcname_len; // kindがND_FUNCALLの時
     Node **args;      // kindがND_FUNCALLの時
     int args_len;     // kindがND_FUNCALLの時
+};
+
+struct DynamicNodeArray
+{
+    Node **data;
+    int capacity;
+    int len;
 };
 
 typedef struct LVar LVar;
@@ -84,6 +94,7 @@ struct Func
     Func *next;
     char *name;
     int len;
+    int args_len;
 };
 
 #endif

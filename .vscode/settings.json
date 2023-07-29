@@ -31,7 +31,8 @@
         "global.h": "c",
         "codegen.h": "c",
         "stdlib.h": "c",
-        "func.h": "c"
+        "func.h": "c",
+        "node_utils.h": "c"
     },
     "files.exclude": {
         "**/*.o": true
