@@ -5,19 +5,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "node_utils.h"
 #include "codegen.h"
 #include "error.h"
 #include "global.h"
 
 int label_num = 0;
+DynamicNodeArray *func_defs;
 
 void lval_gen(Node *node);
 void if_else_gen(Node *node);
 void while_gen(Node *node);
+void for_gen(Node *node);
+void func_call_gen(Node *node);
+void func_def_gen(Node *node);
 void node_gen(Node *node);
 
 void lval_gen(Node *node)
 {
+    // printf(";LVAL_GEN\n");
     if (node->kind != ND_LVAR)
         error_at(token->str, "代入の左辺値が変数ではありません");
 
@@ -93,6 +99,7 @@ void block_gen(Node *node)
 
 void funccall_gen(Node *node)
 {
+    // printf(";FUNCCALL_GEN\n");
     for (int i = 0; i < node->args->len; i++)
     {
         node_gen(node->args->data[i]);
@@ -116,9 +123,38 @@ void funccall_gen(Node *node)
     //         node_gen(node->args->data[i]);
     //     }
     // }
-
-    printf("  call %s\n", node->funcname);
+    printf("  call %.*s\n", node->funcname_len, node->funcname);
     printf("  push rax\n");
+}
+
+void funcdef_gen(Node *node)
+{
+    printf("%.*s:\n", node->funcname_len, node->funcname);
+    printf("  push rbp\n");
+    printf("  mov rbp, rsp\n");
+    for (int i = 0; i < node->funcdef_args->len; i++)
+    {
+        lval_gen(node->funcdef_args->data[i]);
+        printf("  pop rax\n");
+        if (i == 0)
+            printf("  mov [rax], rdi\n");
+        else if (i == 1)
+            printf("  mov [rax], rsi\n");
+        else if (i == 2)
+            printf("  mov [rax], rdx\n");
+        else if (i == 3)
+            printf("  mov [rax], rcx\n");
+        else if (i == 4)
+            printf("  mov [rax], r8\n");
+        else if (i == 5)
+            printf("  mov [rax], r9\n");
+        printf("  push rax\n");
+    }
+
+    block_gen(node->body);
+    printf("  mov rsp, rbp\n");
+    printf("  pop rbp\n");
+    printf("  ret\n");
 }
 
 void node_gen(Node *node)
@@ -147,6 +183,9 @@ void node_gen(Node *node)
     case ND_FUNCALL:
         funccall_gen(node);
         return;
+    case ND_FUNCDEF:
+        push_node(func_defs, node);
+        return;
     case ND_NUM:
         printf("    push %d\n", node->val);
         return;
@@ -157,8 +196,10 @@ void node_gen(Node *node)
         printf("    push rax\n");
         return;
     case ND_ASSIGN:
+
         lval_gen(node->lhs);
         node_gen(node->rhs);
+        /// printf(";ND_ASSIGN\n");
 
         printf("    pop rdi\n");
         printf("    pop rax\n");
@@ -215,6 +256,8 @@ void node_gen(Node *node)
 
 void codegen()
 {
+    func_defs = init_dynamic_node_array(16);
+
     printf(".intel_syntax noprefix\n");
     printf(".globl main\n");
     printf("main:\n");
@@ -233,4 +276,9 @@ void codegen()
     printf("  mov rsp, rbp\n");
     printf("  pop rbp\n");
     printf("  ret\n");
+
+    for (int i = 0; i < func_defs->len; i++)
+    {
+        funcdef_gen(func_defs->data[i]);
+    }
 }

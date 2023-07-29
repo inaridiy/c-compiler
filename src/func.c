@@ -9,14 +9,6 @@
 
 Func *funcs;
 
-// Func *find_func(Token *tok)
-// {
-//     for (Func *func = funcs; func; func = func->next)
-//         if (func->len == tok->len && memcmp(tok->str, func->name, func->len) == 0)
-//             return func;
-//     return NULL;
-// }
-
 Func *find_func(Token *tok)
 {
     char *special1 = "foo";
@@ -35,8 +27,42 @@ Func *find_func(Token *tok)
         Func *func = calloc(1, sizeof(Func));
         func->name = special2;
         func->len = 3;
-        // func->args_len = 2;
         return func;
     }
+
+    char *special3 = "printDigit";
+
+    if (tok->len == 10 && memcmp(tok->str, special3, 10) == 0)
+    {
+        Func *func = calloc(1, sizeof(Func));
+        func->name = special3;
+        func->len = 10;
+        return func;
+    }
+
+    for (Func *func = funcs; func; func = func->next)
+        if (func->len == tok->len && memcmp(tok->str, func->name, func->len) == 0)
+            return func;
+
     return NULL;
+}
+
+Func *new_func(Token *tok)
+{
+    Func *func;
+    func = calloc(1, sizeof(Func));
+    func->name = tok->str;
+    func->len = tok->len;
+    if (funcs == NULL)
+    {
+        func->next = NULL;
+        funcs = func;
+        return func;
+    }
+    else
+    {
+        func->next = funcs;
+        funcs = func;
+        return func;
+    }
 }

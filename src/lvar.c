@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "error.h"
 #include "lvar.h"
 
 LVar *locals;
@@ -20,6 +21,9 @@ LVar *find_lvar(Token *tok)
 
 LVar *new_lvar(Token *tok)
 {
+    if (find_lvar(tok))
+        error_at(tok->str, "変数の再定義です");
+
     LVar *lvar;
     lvar = calloc(1, sizeof(LVar));
     lvar->name = tok->str;

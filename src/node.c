@@ -43,7 +43,7 @@ Node *new_node_lvar(LVar *lvar)
     return node;
 }
 
-Node *new_node_func(Func *func)
+Node *new_node_func_call(Func *func)
 {
     Node *node = calloc(1, sizeof(Node));
     node->kind = ND_FUNCALL;
@@ -53,7 +53,19 @@ Node *new_node_func(Func *func)
     return node;
 }
 
-Node *primary() // 値を返す ex) 1 (1 + 2) a (a + b)
+Node *new_node_func_def(Func *func, DynamicNodeArray *args, Node *body)
+{
+    Node *node = calloc(1, sizeof(Node));
+    node->kind = ND_FUNCDEF;
+    node->funcname = func->name;
+    node->funcname_len = func->len;
+    node->funcdef_args = args;
+    node->body = body;
+
+    return node;
+}
+
+Node *primary() // 値を返す ex) 1 (1 + 2) a (a + b)なぜか関数の定義もある
 {
     Token *indent = consume_indent();
     if (indent)
@@ -62,19 +74,38 @@ Node *primary() // 値を返す ex) 1 (1 + 2) a (a + b)
         {
             Func *func = find_func(indent);
             if (!func)
-                error_at(indent->str, "ittan");
-            Node *node = new_node_func(func);
-            node->args = init_dynamic_node_array(4);
-
-            while (!consume(")"))
             {
-                Node *arg = expr();
-                push_node(node->args, arg);
-                consume(",");
-            }
 
-            return node;
+                func = new_func(indent);
+                DynamicNodeArray *args = init_dynamic_node_array(4);
+
+                while (!consume(")"))
+                {
+                    LVar *lvar = new_lvar(consume_indent());
+                    push_node(args, new_node_lvar(lvar));
+                    consume(",");
+                }
+
+                Node *node = new_node_func_def(func, args, stmt());
+
+                return node;
+            }
+            else
+            {
+                Node *node = new_node_func_call(func);
+                node->args = init_dynamic_node_array(4);
+
+                while (!consume(")"))
+                {
+                    Node *arg = expr();
+                    push_node(node->args, arg);
+                    consume(",");
+                }
+
+                return node;
+            }
         }
+
         else
         {
             LVar *lvar = find_lvar(indent);

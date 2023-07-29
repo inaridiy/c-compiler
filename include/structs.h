@@ -45,6 +45,7 @@ typedef enum
     ND_FOR,
     ND_BLOCK,
     ND_FUNCALL,
+    ND_FUNCDEF,
 } NodeKind;
 
 typedef struct Node Node;
@@ -64,9 +65,12 @@ struct Node
     // int stmts_len; // kindがND_BLOCKの時
     DynamicNodeArray *stmts; // kindがND_BLOCKの時
 
-    char *funcname;         // kindがND_FUNCALLの時
-    int funcname_len;       // kindがND_FUNCALLの時
+    char *funcname;         // kindがND_FUNCALLかND_FUNCDEFの時
+    int funcname_len;       // kindがND_FUNCALLかND_FUNCDEFの時
     DynamicNodeArray *args; // kindがND_FUNCALLの時
+
+    DynamicNodeArray *funcdef_args; // kindがND_FUNCDEFの時
+    Node *body;                     // kindがND_FUNCDEFの時
 };
 
 struct DynamicNodeArray

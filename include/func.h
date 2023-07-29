@@ -4,5 +4,6 @@
 #include "structs.h"
 
 Func *find_func(Token *tok);
+Func *new_func(Token *tok);
 
 #endif

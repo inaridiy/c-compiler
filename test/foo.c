@@ -9,7 +9,11 @@ int foo()
 int bar(int a, int b)
 {
     printf("bar\n");
-    printf("a = %d\n", a);
-    printf("b = %d\n", b);
     return a * b;
+}
+
+int printDigit(int a)
+{
+    printf("%d\n", a);
+    return 0;
 }
