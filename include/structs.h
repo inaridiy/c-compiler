@@ -64,10 +64,9 @@ struct Node
     // int stmts_len; // kindがND_BLOCKの時
     DynamicNodeArray *stmts; // kindがND_BLOCKの時
 
-    char *funcname;   // kindがND_FUNCALLの時
-    int funcname_len; // kindがND_FUNCALLの時
-    Node **args;      // kindがND_FUNCALLの時
-    int args_len;     // kindがND_FUNCALLの時
+    char *funcname;         // kindがND_FUNCALLの時
+    int funcname_len;       // kindがND_FUNCALLの時
+    DynamicNodeArray *args; // kindがND_FUNCALLの時
 };
 
 struct DynamicNodeArray
@@ -94,7 +93,6 @@ struct Func
     Func *next;
     char *name;
     int len;
-    int args_len;
 };
 
 #endif

@@ -35,7 +35,7 @@ Func *find_func(Token *tok)
         Func *func = calloc(1, sizeof(Func));
         func->name = special2;
         func->len = 3;
-        func->args_len = 2;
+        // func->args_len = 2;
         return func;
     }
     return NULL;

@@ -63,14 +63,17 @@ Node *primary() // 値を返す ex) 1 (1 + 2) a (a + b)
             Func *func = find_func(indent);
             if (!func)
                 error_at(indent->str, "ittan");
+            Node *node = new_node_func(func);
+            node->args = init_dynamic_node_array(4);
 
-            // do
-            // {
-            //     Node *node = expr();
-            // } while (consume(","));
+            while (!consume(")"))
+            {
+                Node *arg = expr();
+                push_node(node->args, arg);
+                consume(",");
+            }
 
-            expect(")", "開きカッコに対応する閉じカッコがねぇ！！");
-            return new_node_func(func);
+            return node;
         }
         else
         {

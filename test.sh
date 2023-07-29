@@ -55,5 +55,6 @@ assert 55 "a=0;b=1;for(i=0;i<10;i=i+1){c=a+b;a=b;b=c;}return a;"
 assert 144 "a=0;b=1;for(i=0;i<12;i=i+1){c=a+b;a=b;b=c;}return a;"
 assert 144 "abc=0;b=1;for(i=0;i<12;i=i+1){c=abc+b;abc=b;b=c;}return abc;"
 assert 123 "return foo();"
+assert 8 "return bar(2,4);"
 
 echo OK

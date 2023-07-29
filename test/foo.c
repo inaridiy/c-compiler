@@ -9,5 +9,7 @@ int foo()
 int bar(int a, int b)
 {
     printf("bar\n");
+    printf("a = %d\n", a);
+    printf("b = %d\n", b);
     return a * b;
 }

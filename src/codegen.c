@@ -93,6 +93,30 @@ void block_gen(Node *node)
 
 void funccall_gen(Node *node)
 {
+    for (int i = 0; i < node->args->len; i++)
+    {
+        node_gen(node->args->data[i]);
+        if (i == 0)
+            printf("  pop rdi\n");
+        else if (i == 1)
+            printf("  pop rsi\n");
+        else if (i == 2)
+            printf("  pop rdx\n");
+        else if (i == 3)
+            printf("  pop rcx\n");
+        else if (i == 4)
+            printf("  pop r8\n");
+        else if (i == 5)
+            printf("  pop r9\n");
+    }
+    // if (node->args->len > 6)//後々使使うかもしれない
+    // {
+    //     for (int i = node->args->len - 1; i >= 6; i--)
+    //     {
+    //         node_gen(node->args->data[i]);
+    //     }
+    // }
+
     printf("  call %s\n", node->funcname);
     printf("  push rax\n");
 }
